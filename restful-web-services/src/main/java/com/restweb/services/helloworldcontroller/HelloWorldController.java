@@ -13,4 +13,8 @@ public class HelloWorldController {
 		return"RequestMapping Hello World!!";
 	}
 	
+	@GetMapping("/get-hello-world")
+	public String getSayHelloWorld() {
+		return"GeMapping Hello World!!";
+	}
 }
