@@ -10,11 +10,16 @@ public class HelloWorldController {
 
 	@RequestMapping(method = RequestMethod.GET, path = "/req-hello-world")
 	public String reqSayHelloWorld() {
-		return"RequestMapping Hello World!!";
+		return "RequestMapping Hello World!!";
 	}
-	
+
 	@GetMapping("/get-hello-world")
 	public String getSayHelloWorld() {
-		return"GeMapping Hello World!!";
+		return "GeMapping Hello World!!";
+	}
+
+	@GetMapping("/hello-world-bean")
+	public HelloWorldBean helloworldbean() {
+		return new HelloWorldBean("Hello World Message");
 	}
 }
