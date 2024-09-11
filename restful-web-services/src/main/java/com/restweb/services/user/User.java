@@ -9,10 +9,10 @@ public class User {
 
 	private Integer id;
 	
-	@Size(min = 2)
+	@Size(min = 2, message = "name should have atleast 2 character")
 	private String name;
 	
-	@Past
+	@Past(message = "Birthdate should be past")
 	private LocalDate birthDate;
 
 	public User(Integer id, String name, LocalDate birthDate) {
