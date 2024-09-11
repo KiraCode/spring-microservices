@@ -1,8 +1,13 @@
 package com.restweb.services.user;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +25,7 @@ public class UserResource {
 //	@Autowired
 	private UserDaoService service;
 
-	private UserResource(UserDaoService service) {
+	public UserResource(UserDaoService service) {
 		this.service = service;
 	}
 
@@ -30,14 +35,17 @@ public class UserResource {
 	}
 
 	@GetMapping("/users/{id}")
-	public User retrieveUser(@PathVariable Integer id) {
+	public EntityModel<User> retrieveUser(@PathVariable Integer id) {
 		User user = service.findOne(id);
-		if(user == null) {
-			throw new UserNotFoundException("ID: "+id);
+		if (user == null) {
+			throw new UserNotFoundException("ID: " + id);
 		}
-		return user;
+		EntityModel<User> model = EntityModel.of(user);
+		WebMvcLinkBuilder link =  linkTo(methodOn(this.getClass()).retrieveAllUsers());
+		model.add(link.withRel("all-users"));
+		return model;
 	}
-	
+
 	@DeleteMapping("/users/{id}")
 	public void deleteUser(@PathVariable int id) {
 		service.deleteById(id);
@@ -47,9 +55,7 @@ public class UserResource {
 	public ResponseEntity<User> createUsers(@Valid @RequestBody User user) {
 		User savedUser = service.save(user);
 
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequestUri()
-				.path("/{id}")
+		URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
 				.buildAndExpand(savedUser.getId()).toUri();
 
 		return ResponseEntity.created(location).build();
