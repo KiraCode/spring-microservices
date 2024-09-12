@@ -13,7 +13,7 @@ public class VersioningPersonController {
 	
 	@GetMapping("/v2/person")
 	public PersonV2 getSecondVersionofPerson() {
-		return new PersonV2(new Name("Bob", "CHarlie"));
+		return new PersonV2(new Name("Bob", "Charlie"));
 	}
 	
 	@GetMapping(path = "/person", params = "version=1")
