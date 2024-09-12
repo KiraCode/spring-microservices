@@ -27,6 +27,8 @@ public class User {
 		this.setName(name);
 		this.setBirthDate(birthDate);
 	}
+	
+	public User() {}
 
 	public Integer getId() {
 		return id;

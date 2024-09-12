@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -24,23 +25,27 @@ public class UserResource {
 
 //	@Autowired
 	private UserDaoService service;
+	
+	private UserRepository repository;
 
-	public UserResource(UserDaoService service) {
+	public UserResource(UserDaoService service, UserRepository repository) {
 		this.service = service;
+		this.repository = repository;
 	}
 
-	@GetMapping("/users")
+	@GetMapping("/jpa/users")
 	public List<User> retrieveAllUsers() {
-		return service.findAll();
+		return repository.findAll();
 	}
 
-	@GetMapping("/users/{id}")
+	@GetMapping("/jpa/users/{id}")
 	public EntityModel<User> retrieveUser(@PathVariable Integer id) {
-		User user = service.findOne(id);
+//		User user = service.findOne(id);
+		Optional<User> user = repository.findById(id);
 		if (user == null) {
 			throw new UserNotFoundException("ID: " + id);
 		}
-		EntityModel<User> model = EntityModel.of(user);
+		EntityModel<User> model = EntityModel.of(user.get());
 		WebMvcLinkBuilder link =  linkTo(methodOn(this.getClass()).retrieveAllUsers());
 		model.add(link.withRel("all-users"));
 		return model;
@@ -51,9 +56,9 @@ public class UserResource {
 		service.deleteById(id);
 	}
 
-	@PostMapping("/users")
+	@PostMapping("/jpa/users")
 	public ResponseEntity<User> createUsers(@Valid @RequestBody User user) {
-		User savedUser = service.save(user);
+		User savedUser = repository.save(user);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
 				.buildAndExpand(savedUser.getId()).toUri();
