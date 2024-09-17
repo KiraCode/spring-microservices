@@ -18,20 +18,19 @@ public class CurrencyExchange {
 	@Column(name = "currency_to")
 	private String to;
 	
-	@Column(name = "conversion_multiple")
-	private BigDecimal conversionMultiply;
+	private BigDecimal conversionMultiple;
 	private String environment;
 
 	public CurrencyExchange() {
 		
 	}
 
-	public CurrencyExchange(Long id, String from, String to, BigDecimal conversionMultiply) {
+	public CurrencyExchange(Long id, String from, String to, BigDecimal conversionMultiple) {
 		super();
 		this.id = id;
 		this.from = from;
 		this.to = to;
-		this.conversionMultiply = conversionMultiply;
+		this.conversionMultiple = conversionMultiple;
 	}
 
 	public Long getId() {
@@ -58,12 +57,12 @@ public class CurrencyExchange {
 		this.to = to;
 	}
 
-	public BigDecimal getConversionMultiply() {
-		return conversionMultiply;
+	public BigDecimal getConversionMultiple() {
+		return conversionMultiple;
 	}
 
-	public void setConversionMultiply(BigDecimal conversionMultiply) {
-		this.conversionMultiply = conversionMultiply;
+	public void setConversionMultiple(BigDecimal conversionMultiple) {
+		this.conversionMultiple = conversionMultiple;
 	}
 
 	public String getEnvironment() {
